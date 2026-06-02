@@ -1,0 +1,549 @@
+/* ============================================================
+   Global styles for Rocks Rock
+   Design tokens at the top — edit these to retheme everything.
+   ============================================================ */
+
+:root {
+  --font-ui: 'Nunito', system-ui, sans-serif;
+  --font-journal: 'Lora', Georgia, serif;
+
+  --color-sky: #7EC8E3;
+  --color-road: #C8B48A;
+  --color-shelf-wood: #8B5E3C;
+  --color-journal-cover: #8B1A1A;
+  --color-journal-page: #F5E6C8;
+  --color-journal-ink: #2C1810;
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.18);
+  --shadow-modal: 0 8px 40px rgba(0, 0, 0, 0.45);
+  --radius-card: 10px;
+  --radius-modal: 14px;
+
+  --basket-size: 140px;
+  --basket-margin: 20px;
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { overflow: hidden; font-family: var(--font-ui); }
+
+/* ── App container ─────────────────────────────────────────── */
+.app { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+/* ── Title ─────────────────────────────────────────────────── */
+.app-title {
+  position: fixed;
+  top: 18px;
+  left: 22px;
+  z-index: 100;
+  font-family: var(--font-journal);
+  font-size: 1.6rem;
+  font-style: italic;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  cursor: pointer;
+  user-select: none;
+  animation: bobble 4s ease-in-out infinite;
+}
+
+@keyframes bobble {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50%       { transform: translateY(-4px) rotate(1deg); }
+}
+
+/* ── Nav ────────────────────────────────────────────────────── */
+.app-nav {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+}
+.app-nav__btn {
+  font-size: 1.5rem;
+  background: rgba(255,255,255,0.85);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.app-nav__btn:hover { transform: scale(1.12); box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+.app-nav__btn--active { background: rgba(255,220,100,0.92); }
+
+/* ── Road status ────────────────────────────────────────────── */
+.road-status {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  z-index: 200;
+}
+.road-status--error { background: rgba(180,0,0,0.75); }
+
+/* ── Basket ─────────────────────────────────────────────────── */
+.basket {
+  position: fixed;
+  bottom: var(--basket-margin);
+  right: var(--basket-margin);
+  width: var(--basket-size);
+  height: var(--basket-size);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.18);
+  border: 2px dashed rgba(255,255,255,0.5);
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  pointer-events: none; /* canvas handles the drop detection */
+}
+.basket--highlighted {
+  background: rgba(255,230,100,0.35);
+  border-color: rgba(255,210,50,0.9);
+  transform: scale(1.06);
+  box-shadow: 0 0 20px rgba(255,200,0,0.5);
+}
+.basket__icon { font-size: 3rem; }
+.basket__label { font-size: 0.7rem; color: rgba(255,255,255,0.85); margin-top: 4px; }
+
+/* ── Rock tooltip ───────────────────────────────────────────── */
+.rock-tooltip {
+  background: rgba(30,20,10,0.92);
+  color: #F0E8D8;
+  border-radius: 8px;
+  padding: 10px 13px;
+  box-shadow: var(--shadow-card);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.rock-tooltip__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.rock-tooltip__swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.rock-tooltip__name { font-weight: 700; font-size: 0.9rem; }
+.rock-tooltip__size { margin-left: auto; opacity: 0.7; font-size: 0.78rem; }
+.rock-tooltip__rarity { display: flex; align-items: center; gap: 6px; }
+.rock-tooltip__stars { color: #FFD700; letter-spacing: 1px; }
+.rock-tooltip__label { opacity: 0.75; font-size: 0.75rem; }
+.rock-tooltip__details { margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px; }
+.rock-tooltip__detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 3px;
+}
+.rock-tooltip__detail-key { opacity: 0.6; }
+.rock-tooltip__capitalize { text-transform: capitalize; }
+.rock-tooltip__description {
+  margin-top: 7px;
+  font-size: 0.78rem;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+.rock-tooltip__fun-fact {
+  margin-top: 5px;
+  font-size: 0.75rem;
+  color: #FFE080;
+  line-height: 1.4;
+}
+.rock-tooltip__hint {
+  margin-top: 6px;
+  font-size: 0.7rem;
+  opacity: 0.5;
+  text-align: center;
+}
+
+/* ── Name modal ─────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 500;
+  backdrop-filter: blur(2px);
+}
+.name-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 501;
+  background: #fff;
+  border-radius: var(--radius-modal);
+  padding: 28px 32px;
+  width: min(440px, 90vw);
+  box-shadow: var(--shadow-modal);
+}
+.name-modal__preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.name-modal__swatch {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+.name-modal__rock-name { font-size: 1.1rem; font-weight: 700; }
+.name-modal__rock-meta { font-size: 0.82rem; color: #666; margin-top: 2px; }
+.name-modal__title { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+.name-modal__subtitle { color: #555; font-size: 0.9rem; margin-bottom: 18px; }
+.name-modal__field { position: relative; }
+.name-modal__input {
+  width: 100%;
+  border: 2px solid #DDD;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.name-modal__input:focus { border-color: #6B4C2A; }
+.name-modal__char-count {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  font-size: 0.72rem;
+  color: #AAA;
+}
+.name-modal__error {
+  margin-top: 8px;
+  color: #C0392B;
+  font-size: 0.85rem;
+}
+.name-modal__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  justify-content: flex-end;
+}
+.name-modal__btn {
+  padding: 9px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.1s;
+}
+.name-modal__btn:active { transform: scale(0.97); }
+.name-modal__btn--skip {
+  background: #F0ECE6;
+  color: #555;
+}
+.name-modal__btn--skip:hover { background: #E4DDD4; }
+.name-modal__btn--confirm {
+  background: #6B4C2A;
+  color: #fff;
+}
+.name-modal__btn--confirm:hover { background: #7D5A35; }
+.name-modal__btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ── View overlay (shelf) ───────────────────────────────────── */
+.view-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #F2E8D5;
+  overflow-y: auto;
+}
+
+/* ── Trophy shelf ───────────────────────────────────────────── */
+.shelf-view { min-height: 100vh; padding: 0 0 60px; }
+.shelf-view__header {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, #8B5E3C 0%, #6B4C2A 100%);
+  color: #fff;
+  padding: 24px 32px 20px;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.shelf-view__title { font-family: var(--font-journal); font-size: 1.8rem; font-style: italic; }
+.shelf-view__subtitle { opacity: 0.8; margin-top: 4px; font-size: 0.9rem; }
+.shelf-view__close {
+  margin-top: 12px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: var(--font-ui);
+  transition: background 0.15s;
+}
+.shelf-view__close:hover { background: rgba(255,255,255,0.25); }
+.shelf-view__loading, .shelf-view__empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+  font-size: 1rem;
+}
+.shelf-view__shelves {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0;
+  padding: 8px 24px 24px;
+}
+
+/* Shelf strip — visual wooden shelf every Nth card */
+.shelf-view__shelves::after {
+  content: '';
+  display: block;
+  height: 12px;
+  background: linear-gradient(180deg, #8B5E3C, #6B4226);
+  border-radius: 3px;
+  margin: 4px 0 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  grid-column: 1 / -1;
+}
+
+/* ── Shelf card ─────────────────────────────────────────────── */
+.shelf-card {
+  background: rgba(255,255,255,0.6);
+  border-radius: var(--radius-card);
+  padding: 14px 14px 10px;
+  margin: 12px 8px 0;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.shelf-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+.shelf-card__rock {
+  width: 56px;
+  height: 56px;
+  border-radius: 50% 45% 55% 40%;  /* organic blob shape */
+  box-shadow: inset -4px -4px 8px rgba(0,0,0,0.25), 2px 2px 6px rgba(0,0,0,0.18);
+}
+.shelf-card__info { text-align: center; }
+.shelf-card__display-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #3A2810;
+  word-break: break-word;
+  font-family: var(--font-journal);
+  font-style: italic;
+}
+.shelf-card__type-name { font-size: 0.78rem; color: #6B4C2A; margin-top: 2px; }
+.shelf-card__meta { font-size: 0.72rem; color: #888; margin-top: 2px; }
+.shelf-card__meta .stars { color: #C8A000; }
+.shelf-card__date { font-size: 0.68rem; color: #AAA; margin-top: 2px; }
+.shelf-card__actions { position: absolute; top: 6px; right: 8px; }
+.shelf-card__delete-btn {
+  background: none;
+  border: none;
+  color: #CCC;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s;
+  padding: 2px 4px;
+}
+.shelf-card__delete-btn:hover { color: #C0392B; }
+.shelf-card__confirm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: #555;
+}
+.shelf-card__confirm-yes, .shelf-card__confirm-no {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 7px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-family: var(--font-ui);
+}
+.shelf-card__confirm-yes { background: #C0392B; color: #fff; }
+.shelf-card__confirm-no { background: #EEE; color: #555; }
+
+/* ── Journal ────────────────────────────────────────────────── */
+.journal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 300;
+  backdrop-filter: blur(3px);
+}
+.journal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 301;
+  width: min(720px, 94vw);
+  height: min(500px, 85vh);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-modal);
+  border-radius: 4px 6px 6px 4px;
+}
+.journal__spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  background: linear-gradient(90deg, #6B1010, var(--color-journal-cover), #9B2020);
+  border-radius: 4px 0 0 4px;
+  box-shadow: inset -2px 0 6px rgba(0,0,0,0.3);
+}
+.journal__pages {
+  display: flex;
+  flex: 1;
+  margin-left: 28px;
+  overflow: hidden;
+  border-radius: 0 6px 0 0;
+}
+.journal__page {
+  flex: 1;
+  background: var(--color-journal-page);
+  padding: 28px 24px 20px;
+  position: relative;
+  /* Aged paper texture via layered box-shadows */
+  box-shadow: inset 0 0 30px rgba(100,70,20,0.08);
+  overflow-y: auto;
+}
+/* Subtle paper grain using pseudo-element */
+.journal__page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.5;
+}
+.journal__page--left { border-right: 1px solid rgba(100,70,20,0.15); }
+.journal__gutter {
+  width: 6px;
+  background: linear-gradient(90deg, rgba(100,60,10,0.12), rgba(100,60,10,0.04));
+  flex-shrink: 0;
+}
+.journal__turn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: rgba(100,60,20,0.35);
+  cursor: pointer;
+  padding: 20px 8px;
+  transition: color 0.15s;
+  z-index: 2;
+}
+.journal__turn:hover { color: rgba(100,60,20,0.7); }
+.journal__turn--left { left: -4px; }
+.journal__turn--right { right: -4px; }
+.journal__footer {
+  background: var(--color-journal-cover);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0 0 6px 6px;
+  margin-left: 28px;
+}
+.journal__page-count { color: rgba(255,220,180,0.7); font-size: 0.78rem; font-family: var(--font-journal); }
+.journal__close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,220,180,0.9);
+  padding: 4px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  transition: background 0.15s;
+}
+.journal__close:hover { background: rgba(255,255,255,0.22); }
+
+/* ── Journal page content ───────────────────────────────────── */
+.journal__loading, .journal__page-empty {
+  color: rgba(100,60,20,0.5);
+  font-family: var(--font-journal);
+  font-style: italic;
+  font-size: 0.95rem;
+  padding: 20px 0;
+}
+.journal__entry { font-family: var(--font-journal); color: var(--color-journal-ink); }
+.journal__entry-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.journal__rock-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.journal__rock-label {
+  font-weight: 600;
+  font-style: italic;
+  font-size: 0.95rem;
+  flex: 1;
+}
+.journal__delete-btn {
+  background: none;
+  border: none;
+  color: rgba(100,60,20,0.3);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: color 0.15s;
+  padding: 2px 4px;
+}
+.journal__delete-btn:hover { color: #C0392B; }
+.journal__entry-text {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  margin-bottom: 10px;
+  color: rgba(44,24,16,0.88);
+}
+.journal__entry-date {
+  font-size: 0.72rem;
+  color: rgba(100,60,20,0.55);
+  font-style: italic;
+}
+.journal__page-number {
+  position: absolute;
+  bottom: 10px;
+  right: 16px;
+  font-size: 0.68rem;
+  color: rgba(100,60,20,0.35);
+  font-style: italic;
+}
