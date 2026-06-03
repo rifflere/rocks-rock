@@ -6,6 +6,8 @@ A communal, browser-based rock-collecting experience. Walk a procedurally genera
 
 ## User Guide
 
+<img src="./images/rocks-rock-main-view.jpg" width=400>
+
 ### The Road View
 - **Hover** over a rock to see its name, size, and rarity.
 - **Click and hold** (300 ms) to inspect full collector details: hardness, luster, texture, and a fun fact.
@@ -13,10 +15,16 @@ A communal, browser-based rock-collecting experience. Walk a procedurally genera
 - After dropping a rock, a naming dialog appears. Type a nickname or click **Skip**.
 - Rocks reset every **24 hours** — a fresh batch appears at midnight.
 
+<br>
+<img src="./images/trophy-shelf.jpg" width=400>
+
 ### The Trophy Shelf (🏆)
 - Click the trophy icon in the upper right to browse all collected rocks.
 - Rocks are sorted newest-first on warm wooden shelves.
 - Click the small **×** on any rock card to remove it from the shelf.
+
+<br>
+<img src="./images/rock-journal.jpg" width=400>
 
 ### The Journal (📖)
 - Click the book icon in the upper right to open the field journal.
